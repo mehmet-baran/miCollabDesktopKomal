@@ -19,8 +19,8 @@ public class MiCollab extends CommonSteps {
         int testDurationInMinutes = 420;
         int callDurationInSeconds = 20;
         licensePage.acceptButton.click();
-        loginPage.usernameTextbox.sendKeys(ConfigurationReader.get("loginId2"));
-        loginPage.passwordTextbox.sendKeys(ConfigurationReader.get("loginPassword2"));
+        loginPage.usernameTextbox.sendKeys(ConfigurationReader.get("loginId1"));
+        loginPage.passwordTextbox.sendKeys(ConfigurationReader.get("loginPassword1"));
         loginPage.loginButton.click();
         waitFor(1);
         dashboardPage.skipButton.click();
