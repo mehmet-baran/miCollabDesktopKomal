@@ -38,26 +38,17 @@ public class DashboardPage extends CommonPageElements {
 
     public boolean isIncomingCallAvailable() {
         List<WebElement> incomingCallList = driver.findElements(By.xpath("(//div[@data-vn='inboundCall']//div[starts-with(@class,'cust-button-content')])[2]"));
-        if (incomingCallList.size() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return incomingCallList.size() != 0;
     }
 
     public boolean isEndCallButtonAvailable() {
         List<WebElement> endCallList = driver.findElements(By.xpath("//div[@class='flex-btn incall-end-btn tappable']"));
-        if (endCallList.size() == 0) {
-            return false;
-        } else return true;
+        return endCallList.size() != 0;
     }
 
     public boolean doesCallContinue(){
         List<WebElement> controlElements = driver.findElements(By.xpath("(//div[@class=\"header-btn tappable\"])[6]"));
-        if(controlElements.size()==0){
-            return true;
-        }
-        else return false;
+        return controlElements.size() == 0;
     }
 
 }
