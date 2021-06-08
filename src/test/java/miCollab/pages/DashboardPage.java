@@ -30,9 +30,6 @@ public class DashboardPage extends CommonPageElements {
     @FindBy(css = "[data-hotkey-id='declineCall']")
     public WebElement endCallHotkey;
 
-    @FindBy(xpath = "(//div[@class=\"header-btn tappable\"])[6]")
-    public WebElement controlElement;
-
 
 
 
@@ -49,6 +46,11 @@ public class DashboardPage extends CommonPageElements {
     public boolean doesCallContinue(){
         List<WebElement> controlElements = driver.findElements(By.xpath("(//div[@class=\"header-btn tappable\"])[6]"));
         return controlElements.size() == 0;
+    }
+
+    public boolean isControlElementAvailable(){
+        List<WebElement> controlElements = driver.findElements(By.xpath("//div[.='Call History']"));
+        return controlElements.size()!=0;
     }
 
 }
