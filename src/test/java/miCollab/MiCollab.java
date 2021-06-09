@@ -3,6 +3,7 @@ package miCollab;
 import miCollab.utilities.CommonSteps;
 import miCollab.utilities.ConfigurationReader;
 import miCollab.utilities.Driver;
+import miCollab.utilities.ExcelUtil;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 public class MiCollab extends CommonSteps {
 
     @Test
-    public void incomingCallTest() {
+    public void incomingCallTest() throws InterruptedException {
         int testDurationInDays = 30;
         licensePage.acceptButton.click();
         loginPage.usernameTextbox.sendKeys(ConfigurationReader.get("loginId1"));
@@ -51,6 +52,9 @@ public class MiCollab extends CommonSteps {
             }
 
         }
+
+        dashboardPage.writeTestData();
+
 
         System.out.println("numberOfCalls = " + numberOfCalls);
     }

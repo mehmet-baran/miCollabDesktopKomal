@@ -27,5 +27,6 @@ public abstract class CommonPageElements extends Driver {
     public WebElement getHotkey(String hotkeyText){
         return driver.findElement(By.xpath("//div[@class='hotkey-title'][.='"+hotkeyText+"']"));
     }
+
 }
 
