@@ -1,12 +1,20 @@
 package miCollab.pages;
 
+import io.appium.java_client.windows.WindowsDriver;
 import miCollab.utilities.ExcelUtil;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -30,26 +38,26 @@ public class DashboardPage extends CommonPageElements {
     @FindBy(css = "[data-vn=\"dnBarcode\"]")
     public WebElement barcode;
 
-    @FindBy(css ="[data-hotkey-id='acceptCall']")
+    @FindBy(css = "[data-hotkey-id='acceptCall']")
     public WebElement acceptCallHotKey;
 
     @FindBy(css = "[data-hotkey-id='declineCall']")
     public WebElement endCallHotkey;
 
-    public void clickOnButton(String buttonText){
-        driver.findElement(By.xpath("//div[@class='button-content'][.='"+buttonText+"']")).click();
+    public void clickOnButton(String buttonText) {
+        driver.findElement(By.xpath("//div[@class='button-content'][.='" + buttonText + "']")).click();
     }
 
-    public void goToLeftMenuOption(String option){
-        driver.findElement(By.xpath("//li[starts-with(@class,'left-menu-li')]//span[.='"+option+"']")).click();
+    public void goToLeftMenuOption(String option) {
+        driver.findElement(By.xpath("//li[starts-with(@class,'left-menu-li')]//span[.='" + option + "']")).click();
     }
 
-    public void changeSettingsOf(String option){
-        driver.findElement(By.xpath("//div[@class='mtl-li-content'][.='"+option+"']/..")).click();
+    public void changeSettingsOf(String option) {
+        driver.findElement(By.xpath("//div[@class='mtl-li-content'][.='" + option + "']/..")).click();
     }
 
-    public WebElement getHotkey(String hotkeyText){
-        return driver.findElement(By.xpath("//div[@class='hotkey-title'][.='"+hotkeyText+"']"));
+    public WebElement getHotkey(String hotkeyText) {
+        return driver.findElement(By.xpath("//div[@class='hotkey-title'][.='" + hotkeyText + "']"));
     }
 
 
@@ -63,22 +71,22 @@ public class DashboardPage extends CommonPageElements {
         return endCallList.size() != 0;
     }
 
-    public boolean doesCallContinue(){
+    public boolean doesCallContinue() {
         List<WebElement> controlElements = driver.findElements(By.xpath("(//div[@class=\"header-btn tappable\"])[6]"));
         return controlElements.size() == 0;
     }
 
-    public boolean isControlElementAvailable(){
+    public boolean isControlElementAvailable() {
         List<WebElement> controlElements = driver.findElements(By.xpath("//div[.='MiTeam']"));
-        return controlElements.size()!=0;
+        return controlElements.size() != 0;
     }
 
     public void writeTestData() throws InterruptedException {
-        ExcelUtil testData=new ExcelUtil("src/test/resources/MiCollabTestData.xlsx", "Sheet1");
+        ExcelUtil testData = new ExcelUtil("src/test/resources/MiCollabTestData.xlsx", "Sheet1");
         List<WebElement> elements = driver.findElements(By.xpath("//ul[@data-vn=\"allList\"]//span[starts-with(@class,'width-constrained-1-h')]"));
-        List<String > callFromList= new ArrayList<>();
-        List<String > dateAndTimeList=new ArrayList<>();
-        List<String > durationList=new ArrayList<>();
+        List<String> callFromList = new ArrayList<>();
+        List<String> dateAndTimeList = new ArrayList<>();
+        List<String> durationList = new ArrayList<>();
 
         Thread.sleep(1000);
         for (int i = 0; i < elements.size(); i++) {
@@ -88,23 +96,74 @@ public class DashboardPage extends CommonPageElements {
         }
 
         for (int i = 0; i < callFromList.size(); i++) {
-            testData.setCellData(callFromList.get(i),"callFrom", i+1);
-            testData.setCellData(""+(i+1), "SN", i+1);
-            if(durationList.get(i).isEmpty()){
-                testData.setCellData("Missed Call","Duration", i+1);
-
-            }else {
-                testData.setCellData(durationList.get(i).substring(1,6),"Duration", i+1);
+            testData.setCellData(callFromList.get(i), "callFrom", i + 1);
+            testData.setCellData("" + (i + 1), "SN", i + 1);
+            if (durationList.get(i).isEmpty()) {
+                testData.setCellData("Missed Call", "Duration", i + 1);
+            } else {
+                testData.setCellData(durationList.get(i).substring(1, 6), "Duration", i + 1);
             }
-            if(dateAndTimeList.get(i).contains("Today")){
-                testData.setCellData(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM"))+" 2021","Date", i+1);
-            }else if(dateAndTimeList.get(i).contains("Yesterday")){
-                testData.setCellData(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("d MMM"))+" 2021", "Date", i+1);
-            }else {
-                testData.setCellData(dateAndTimeList.get(i).substring(0,5)+" 2021","Date", i+1);
+            if (dateAndTimeList.get(i).contains("Today")) {
+                testData.setCellData(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM")) + " 2021", "Date", i + 1);
+            } else if (dateAndTimeList.get(i).contains("Yesterday")) {
+                testData.setCellData(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("d MMM")) + " 2021", "Date", i + 1);
+            } else {
+                testData.setCellData(dateAndTimeList.get(i).substring(0, 5) + " 2021", "Date", i + 1);
             }
-            testData.setCellData(dateAndTimeList.get(i).substring(dateAndTimeList.get(i).length()-7),"Time", i+1);
+            testData.setCellData(dateAndTimeList.get(i).substring(dateAndTimeList.get(i).length() - 7), "Time", i + 1);
         }
+    }
+
+    public void sendDataToGoogleDrive() throws UnknownHostException, InterruptedException {
+        WindowsDriver windowsDriver=null;
+        InetAddress ip = InetAddress.getLocalHost();
+        String[] split = ip.toString().split("/");
+        String ipAddress=split[split.length-1];
+
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setCapability("app", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+        desiredCapabilities.setCapability("platformName", "Windows");
+        desiredCapabilities.setCapability("deviceName", "WindowsPC");
+        try {
+            windowsDriver = new WindowsDriver(new URL("http://127.0.0.1:4723"), desiredCapabilities);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        windowsDriver.findElement(By.name("Address and search bar")).sendKeys("https://drive.google.com/drive/my-drive");
+        Actions actionsForWindowsDriver=new Actions(windowsDriver);
+        actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
+        Thread.sleep(5000);
+        if(windowsDriver.findElements(By.name("Email or phone")).size()>0){
+            windowsDriver.findElement(By.name("Email or phone")).sendKeys("mehmet.moderator66@gmail.com");
+            windowsDriver.findElement(By.name("Next")).click();
+        }else if(windowsDriver.findElement(By.name("Mehmet Moderator mehmet.moderator66@gmail.com Signed out")).isDisplayed()){
+            windowsDriver.findElement(By.name("Mehmet Moderator mehmet.moderator66@gmail.com Signed out")).click();
+        }
+        Thread.sleep(5000);
+        windowsDriver.findElement(By.name("Enter your password")).sendKeys("Ss.000001");
+        windowsDriver.findElement(By.name("Next")).click();
+        Thread.sleep(5000);
+        windowsDriver.findElement(By.name("New")).click();
+        Thread.sleep(5000);
+        windowsDriver.findElement(By.name("File upload")).click();
+        Thread.sleep(5000);
+            windowsDriver.findElement(By.name("MiCollabTestData.xlsx")).click();
+            Thread.sleep(5000);
+            actionsForWindowsDriver.sendKeys(Keys.F2).perform();
+            actionsForWindowsDriver.sendKeys(ipAddress + " MiCollabTestData").perform();
+            actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
+            Thread.sleep(5000);
+            windowsDriver.findElement(By.name(ipAddress+" MiCollabTestData.xlsx")).click();
+            actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
+
+
+        windowsDriver.findElement(By.name("Google Account: Mehmet Moderator (mehmet.moderator66@gmail.com)")).click();
+        Thread.sleep(5000);
+        windowsDriver.findElement(By.name("Sign out")).click();
+        Thread.sleep(1000);
+
+        windowsDriver.quit();
+
 
 
     }

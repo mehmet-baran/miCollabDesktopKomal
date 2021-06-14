@@ -1,26 +1,22 @@
 package miCollab;
 
-import miCollab.utilities.CommonSteps;
-import miCollab.utilities.ConfigurationReader;
-import miCollab.utilities.Driver;
-import miCollab.utilities.ExcelUtil;
+import miCollab.utilities.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+import java.net.UnknownHostException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class MiCollab extends CommonSteps {
 
     @Test
-    public void incomingCallTest() throws InterruptedException {
+    public void incomingCallTest() throws InterruptedException, UnknownHostException {
         int testDurationInDays = 30;
+
         licensePage.acceptButton.click();
-        loginPage.usernameTextbox.sendKeys(ConfigurationReader.get("loginId1"));
-        loginPage.passwordTextbox.sendKeys(ConfigurationReader.get("loginPassword1"));
+        loginPage.usernameTextbox.sendKeys(loginPage.getCredentials()[0]);
+        loginPage.passwordTextbox.sendKeys(loginPage.getCredentials()[1]);
         loginPage.loginButton.click();
         waitFor(1);
         dashboardPage.skipButton.click();
@@ -64,9 +60,21 @@ public class MiCollab extends CommonSteps {
         }
         dashboardPage.goToLeftMenuOption("Call History");
         dashboardPage.writeTestData();
+        dashboardPage.sendDataToGoogleDrive();
+
         System.out.println("numberOfCalls = " + numberOfCalls);
+
     }
 
+    @BeforeSuite
+    public void runWinAppDriver() throws Exception {
+        WindowsDriverSetup.setUp();
+    }
+
+    @AfterSuite
+    public void quitWinAppDriver(){
+        WindowsDriverSetup.tearDown();
+    }
 
     @BeforeTest
     public void create() {
