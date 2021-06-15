@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class MiCollab extends CommonSteps {
 
     @Test
-    public void incomingCallTest() throws InterruptedException, UnknownHostException {
+    public void incomingCallTest() throws UnknownHostException, InterruptedException {
         int testDurationInDays = 30;
 
         licensePage.acceptButton.click();
@@ -60,20 +60,9 @@ public class MiCollab extends CommonSteps {
         }
         dashboardPage.goToLeftMenuOption("Call History");
         dashboardPage.writeTestData();
-        dashboardPage.sendDataToGoogleDrive();
 
         System.out.println("numberOfCalls = " + numberOfCalls);
 
-    }
-
-    @BeforeSuite
-    public void runWinAppDriver() throws Exception {
-        WindowsDriverSetup.setUp();
-    }
-
-    @AfterSuite
-    public void quitWinAppDriver(){
-        WindowsDriverSetup.tearDown();
     }
 
     @BeforeTest

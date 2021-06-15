@@ -1,22 +1,11 @@
 package miCollab.pages;
 
-import io.appium.java_client.windows.WindowsDriver;
 import miCollab.utilities.ExcelUtil;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
-
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,60 +101,6 @@ public class DashboardPage extends CommonPageElements {
             }
             testData.setCellData(dateAndTimeList.get(i).substring(dateAndTimeList.get(i).length() - 7), "Time", i + 1);
         }
-    }
-
-    public void sendDataToGoogleDrive() throws UnknownHostException, InterruptedException {
-        WindowsDriver windowsDriver=null;
-        InetAddress ip = InetAddress.getLocalHost();
-        String[] split = ip.toString().split("/");
-        String ipAddress=split[split.length-1];
-
-        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setCapability("app", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
-        desiredCapabilities.setCapability("platformName", "Windows");
-        desiredCapabilities.setCapability("deviceName", "WindowsPC");
-        try {
-            windowsDriver = new WindowsDriver(new URL("http://127.0.0.1:4723"), desiredCapabilities);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        windowsDriver.findElement(By.name("Address and search bar")).sendKeys("https://drive.google.com/drive/my-drive");
-        Actions actionsForWindowsDriver=new Actions(windowsDriver);
-        actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
-        Thread.sleep(5000);
-        if(windowsDriver.findElements(By.name("Email or phone")).size()>0){
-            windowsDriver.findElement(By.name("Email or phone")).sendKeys("mehmet.moderator66@gmail.com");
-            windowsDriver.findElement(By.name("Next")).click();
-        }else if(windowsDriver.findElement(By.name("Mehmet Moderator mehmet.moderator66@gmail.com Signed out")).isDisplayed()){
-            windowsDriver.findElement(By.name("Mehmet Moderator mehmet.moderator66@gmail.com Signed out")).click();
-        }
-        Thread.sleep(5000);
-        windowsDriver.findElement(By.name("Enter your password")).sendKeys("Ss.000001");
-        windowsDriver.findElement(By.name("Next")).click();
-        Thread.sleep(5000);
-        windowsDriver.findElement(By.name("New")).click();
-        Thread.sleep(5000);
-        windowsDriver.findElement(By.name("File upload")).click();
-        Thread.sleep(5000);
-            windowsDriver.findElement(By.name("MiCollabTestData.xlsx")).click();
-            Thread.sleep(5000);
-            actionsForWindowsDriver.sendKeys(Keys.F2).perform();
-            actionsForWindowsDriver.sendKeys(ipAddress + " MiCollabTestData").perform();
-            actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
-            Thread.sleep(5000);
-            windowsDriver.findElement(By.name(ipAddress+" MiCollabTestData.xlsx")).click();
-            actionsForWindowsDriver.sendKeys(Keys.ENTER).perform();
-
-
-        windowsDriver.findElement(By.name("Google Account: Mehmet Moderator (mehmet.moderator66@gmail.com)")).click();
-        Thread.sleep(5000);
-        windowsDriver.findElement(By.name("Sign out")).click();
-        Thread.sleep(1000);
-
-        windowsDriver.quit();
-
-
-
     }
 
 }
