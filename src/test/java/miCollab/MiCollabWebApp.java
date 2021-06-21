@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class MiCollab extends CommonSteps {
+public class MiCollabWebApp extends CommonSteps {
 
     @Test
     public void incomingCallTest() throws UnknownHostException, InterruptedException {
